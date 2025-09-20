@@ -1,10 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="./styles.css" rel="stylesheet" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Scrumblr</title>
-  </head>
-  <body></body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+</head>
+
+    <body>
+
+       <header>
+           <h1>Project title goes here</h1>
+       </header>
+
+  <div class="square"></div>
+
+     <div class="column">
+        <h1>Goals</h1>
+     </div>
+
+ <div class="container">
+
+            <!-- List 1 -->
+      <div>
+          <div class="bubble-headerStart">
+             <h1>Start</h1>
+          </div>
+
+        <ul id="list1" class="list">
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+            <li>Item 4</li>
+        </ul>
+      </div>
+
+             <!-- List 2 -->
+      <div>
+          <div class="bubble-headerProgress">
+              <h1>In Progress</h1>
+          </div>
+
+        <ul id="list2" class="list">
+            <li>Item A</li>
+            <li>Item B</li>
+            <li>Item C</li>
+            <li>Item D</li>
+        </ul>
+      </div>
+
+              <!-- List 3 -->
+      <div>
+            <div class="bubble-headerComplete">
+                <h1>Complete</h1>
+            </div>
+
+        <ul id="list3" class="list">
+            <li>Item A1</li>
+            <li>Item B2</li>
+            <li>Item C3</li>
+            <li>Item D4</li>
+        </ul>
+      </div>
+
+ </div>
+
+    <script>
+        // Initialize Sortable for both lists
+        const list1 = document.getElementById('list1');
+        const list2 = document.getElementById('list2');
+        const list3 = document.getElementById('list3');
+
+        new Sortable(list1, {
+            group: 'shared',  // Share the group with list2
+            animation: 150,
+        });
+
+        new Sortable(list2, {
+            group: 'shared',  // Share the group with list1
+            animation: 150,
+        });
+        new Sortable(list3, {
+            group: 'shared',  // Share the group with list1
+            animation: 150,
+        });
+    </script>
+</body>
 </html>
