@@ -1,91 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Scrumblr</title>
 
-       <link rel="stylesheet" href="style.css">
-       <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
-</head>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+  </head>
 
-    <body>
+  <body>
+    <header>
+      <h1>Project title goes here</h1>
+    </header>
 
-       <header>
-           <h1>Project title goes here</h1>
-       </header>
+    <div class="square"></div>
 
-  <div class="square"></div>
+    <div class="goals-section">
+      <h1>Goals</h1>
+    </div>
 
-     <div class="column">
-        <h1>Goals</h1>
-     </div>
+    <div class="container">
+      <!-- column 1: to start -->
+      <div class="column">
+        <div class="bubble-headerStart">
+          <h1>To Start</h1>
+        </div>
 
- <div class="container">
-       <div>
-            <!-- List 1 -->
-          <div class="bubble-headerStart">
-             <h1>Start</h1>
+        <div id="start-list" class="list">
+          <div class="card">
+            <h3 class="title">task 1</h3>
+            <p class="due-date">Due: Sept 22</p>
+            <p class="assignee">Anna</p>
           </div>
-
-        <ul id="list1" class="list">
-            <li>Item 1</li>
-            <li>Item 2</li>
-            <li>Item 3</li>
-            <li>Item 4</li>
-        </ul>
-      </div>
-
-             <!-- List 2 -->
-      <div>
-          <div class="bubble-headerProgress">
-              <h1>In Progress</h1>
+          <div class="card">
+            <h3 class="title">task 2</h3>
+            <p class="due-date">Due: Sept 30</p>
+            <p class="assignee">Bob</p>
           </div>
-
-        <ul id="list2" class="list">
-            <li>Item A</li>
-            <li>Item B</li>
-            <li>Item C</li>
-            <li>Item D</li>
-        </ul>
+          <div class="card">
+            <h3 class="title">task 3</h3>
+            <p class="due-date">Due: Oct 2</p>
+            <p class="assignee">Julia</p>
+          </div>
+        </div>
       </div>
 
-              <!-- List 3 -->
-      <div>
-            <div class="bubble-headerComplete">
-                <h1>Complete</h1>
-            </div>
+      <!-- column 2: in progress -->
+      <div class="column">
+        <div class="bubble-headerProgress">
+          <h1>In Progress</h1>
+        </div>
 
-        <ul id="list3" class="list">
-            <li>Item A1</li>
-            <li>Item B2</li>
-            <li>Item C3</li>
-            <li>Item D4</li>
-        </ul>
+        <div id="progress-list" class="list">
+          <div class="card">
+            <h3 class="title">task A</h3>
+            <p class="due-date">Due: Sept 22</p>
+            <p class="assignee">Jack</p>
+          </div>
+          <div class="card">
+            <h3 class="title">task B</h3>
+            <p class="due-date">Due: Sept 30</p>
+            <p class="assignee">Julia</p>
+          </div>
+          <div class="card">
+            <h3 class="title">task C</h3>
+            <p class="due-date">Due: Oct 2</p>
+            <p class="assignee">Bob</p>
+          </div>
+        </div>
       </div>
 
- </div>
+      <!-- column 3: completed -->
+      <div class="column">
+        <div class="bubble-headerComplete">
+          <h1>Completed</h1>
+        </div>
 
-    <script>
-        // Initialize Sortable for both lists
-        const list1 = document.getElementById('list1');
-        const list2 = document.getElementById('list2');
-        const list3 = document.getElementById('list3');
+        <div id="completed-list" class="list">
+          <div class="card">
+            <h3 class="title">task I</h3>
+            <p class="due-date">Due: Sept 22</p>
+            <p class="assignee">Bob</p>
+          </div>
+          <div class="card">
+            <h3 class="title">task II</h3>
+            <p class="due-date">Due: Sept 30</p>
+            <p class="assignee">Anna</p>
+          </div>
+          <div class="card">
+            <h3 class="title">task III</h3>
+            <p class="due-date">Due: Oct 2</p>
+            <p class="assignee">Jack</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        new Sortable(list1, {
-            group: 'shared',  // Share the group with list2
-            animation: 150,
-        });
-
-        new Sortable(list2, {
-            group: 'shared',  // Share the group with list1
-            animation: 150,
-        });
-        new Sortable(list3, {
-            group: 'shared',  // Share the group with list1
-            animation: 150,
-        });
-    </script>
-</body>
+    <script src="index.js"></script>
+  </body>
 </html>

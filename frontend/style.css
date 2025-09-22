@@ -12,7 +12,7 @@
             border-radius: 8px;
         }
 
-        .list li {
+        .card {
             padding: 8px;
             margin: 5px 0;
             background-color: #f1f1f1;
@@ -21,11 +21,11 @@
             cursor: move;
         }
 
-        .list li:hover {
+        .card:hover {
             background-color: #e2e2e2;
         }
 
-         .column {
+         .goals-section {
               float: left;
               width: 25%;
         }
@@ -90,5 +90,3 @@
             left: 50%;
             transform: translateX(-50%);
        }
-
-
