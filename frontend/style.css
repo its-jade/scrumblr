@@ -1,86 +1,100 @@
-  .container {
-            display: flex;
-            justify-content: space-around;
-            padding: 20px;
-        }
+  body {
+      font-family: "Nunito", sans-serif;
+  }
 
-        .list {
-            width: 200px;
-            min-height: 300px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-        }
+  h1,
+  h2,
+  h3,
+  .bubble-headerStart,
+  .bubble-headerProgress,
+  .bubble-headerComplete {
+      font-family: "IBM Plex Sans", sans-serif;
+      font-weight: 500;
+  }
 
-        .card {
-            padding: 8px;
-            margin: 5px 0;
-            background-color: #f1f1f1;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            cursor: move;
-        }
+  header {
+      padding: 10px;
+      text-align: left;
+      font-size: 30px;
+      color: Black;
+      width: 2515px;
+      height: 100px;
+  }
 
-        .card:hover {
-            background-color: #e2e2e2;
-        }
+.container {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+}
 
-         .goals-section {
-              float: left;
-              width: 25%;
-        }
+.list {
+    width: 200px;
+    min-height: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
 
-        header {
-              font-family: Times New Roman, Helvetica, sans-serif;
-              padding: 10px;
-              text-align: left;
-              font-size: 30px;
-              color: Black;
-              width: 2515px;
-              height: 100px;
-        }
+.card {
+    padding: 8px;
+    margin: 5px 0;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: move;
+}
 
-        .square {
-              height: 5px;
-              width: 50000px;
-              background-color: red;
-        }
+.card:hover {
+    background-color: #e2e2e2;
+}
 
-        .bubble-headerStart {
-             position: relative; 
-             background-color: #FF746C; 
-             color: Black; 
-             height: 40px; 
-             border-radius: 10px;
-             width: 300px; 
-             text-align: center;
-             margin: 50px ; 
-        }
-
-        .bubble-headerProgress {
-            position: relative; 
-            background-color: #FFC067; 
-            color: Black; 
-            height: 40px; 
-            border-radius: 10px;
-            width: 300px; 
-            text-align: center;
-            margin: 50px ; 
-       }
-
-       .bubble-headerComplete {
-            position: relative; 
-            background-color: #6EC175; 
-            color: Black; 
-            height: 40px; 
-            border-radius: 10px;
-            width: 300px; 
-            text-align: center;
-            margin: 50px ; 
-       }
+.goals-section {
+    float: left;
+    width: 25%;
+}
 
 
-       .bubble-header::after {
+.square {
+    height: 5px;
+    width: 50000px;
+    background-color: red;
+}
+
+.bubble-headerStart {
+    position: relative; 
+    background-color: #FF746C; 
+    color: Black; 
+    height: 40px; 
+    border-radius: 10px;
+    width: 300px; 
+    text-align: center;
+    margin: 50px ; 
+}
+
+.bubble-headerProgress {
+    position: relative; 
+    background-color: #FFC067; 
+    color: Black; 
+    height: 40px; 
+    border-radius: 10px;
+    width: 300px; 
+    text-align: center;
+    margin: 50px ; 
+}
+
+.bubble-headerComplete {
+    position: relative; 
+    background-color: #6EC175; 
+    color: Black; 
+    height: 40px; 
+    border-radius: 10px;
+    width: 300px; 
+    text-align: center;
+    margin: 50px ; 
+}
+
+
+.bubble-header::after {
             content: ""; 
             position: absolute;
             width: 0;
