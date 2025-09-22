@@ -1,5 +1,7 @@
   body {
       font-family: "Nunito", sans-serif;
+      font-size: 1rem;
+      color: #222;
   }
 
   h1,
@@ -11,96 +13,85 @@
       font-family: "IBM Plex Sans", sans-serif;
       font-weight: 500;
   }
+  
+  .container {
+    max-width: 90rem;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 4vw, 2rem); 
+  }
+
+  .main-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+  }
 
   header {
       padding: 10px;
       text-align: left;
-      font-size: 30px;
+      font-size: 2rem;
       color: Black;
-      width: 2515px;
-      height: 100px;
   }
 
-.container {
-    display: flex;
-    justify-content: space-around;
-    padding: 20px;
+.sidebar {
+    flex: 0 0 15rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: #f9f9f9;
 }
 
-.list {
-    width: 200px;
-    min-height: 300px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+.kanban-board {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 1.5rem;
+}
+
+.column {
+    flex: 1 1 32%;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: #cecece;
 }
 
 .card {
-    padding: 8px;
-    margin: 5px 0;
-    background-color: #f1f1f1;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    margin-block: 1rem;
+    padding: 1rem;
+    border-radius: .75rem;
+    background-color: #e2e2e2;
     cursor: move;
 }
 
 .card:hover {
-    background-color: #e2e2e2;
-}
-
-.goals-section {
-    float: left;
-    width: 25%;
-}
-
-
-.square {
-    height: 5px;
-    width: 50000px;
-    background-color: red;
+    background-color: #f9f9f9;
 }
 
 .bubble-headerStart {
-    position: relative; 
-    background-color: #FF746C; 
-    color: Black; 
-    height: 40px; 
+    position: relative;  
+    padding: 0.5rem 1rem; 
+    margin-bottom: 1rem;
     border-radius: 10px;
-    width: 300px; 
-    text-align: center;
-    margin: 50px ; 
+    background-color: #FF746C;
+    color: Black;
+    text-align: left;
 }
 
 .bubble-headerProgress {
-    position: relative; 
-    background-color: #FFC067; 
-    color: Black; 
-    height: 40px; 
+    position: relative;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
     border-radius: 10px;
-    width: 300px; 
-    text-align: center;
-    margin: 50px ; 
+    background-color: #FFC067;
+    color: Black;
+    text-align: left;
 }
 
 .bubble-headerComplete {
-    position: relative; 
-    background-color: #6EC175; 
-    color: Black; 
-    height: 40px; 
+    position: relative;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
     border-radius: 10px;
-    width: 300px; 
-    text-align: center;
-    margin: 50px ; 
+    background-color: #6EC175;
+    color: Black;
+    text-align: left;
 }
-
-
-.bubble-header::after {
-            content: ""; 
-            position: absolute;
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            left: 50%;
-            transform: translateX(-50%);
-       }

@@ -16,88 +16,101 @@
   </head>
 
   <body>
-    <header>
-      <h1>Project title goes here</h1>
-    </header>
-
-    <div class="square"></div>
-
-    <div class="goals-section">
-      <h1>Goals</h1>
-    </div>
-
     <div class="container">
-      <!-- column 1: to start -->
-      <div class="column">
-        <div class="bubble-headerStart">
-          <h1>To Start</h1>
+      <header>
+        <h1>Project title goes here</h1>
+      </header>
+
+      <div class="main-content">
+        <div class="sidebar">
+          <div id="goals-section">
+            <h1>Goals</h1>
+            <p>Project goals and description will go here.</p>
+          </div>
+          <div id="members-list">
+            <h1>Members</h1>
+            <ul>
+              <li>Person 1</li>
+              <li>Person 2</li>
+              <li>Person 3</li>
+            </ul>
+          </div>
         </div>
 
-        <div id="start-list" class="list">
-          <div class="card">
-            <h3 class="title">task 1</h3>
-            <p class="due-date">Due: Sept 22</p>
-            <p class="assignee">Anna</p>
-          </div>
-          <div class="card">
-            <h3 class="title">task 2</h3>
-            <p class="due-date">Due: Sept 30</p>
-            <p class="assignee">Bob</p>
-          </div>
-          <div class="card">
-            <h3 class="title">task 3</h3>
-            <p class="due-date">Due: Oct 2</p>
-            <p class="assignee">Julia</p>
-          </div>
-        </div>
-      </div>
+        <div class="kanban-board">
+          <!-- column 1: to start -->
+          <div class="column">
+            <div class="bubble-headerStart">
+              <h1>To Start</h1>
+            </div>
 
-      <!-- column 2: in progress -->
-      <div class="column">
-        <div class="bubble-headerProgress">
-          <h1>In Progress</h1>
-        </div>
+            <div id="start-list" class="list">
+              <div class="card">
+                <h3 class="title">task 1</h3>
+                <p class="due-date">Due: Sept 22</p>
+                <p class="assignee">Anna</p>
+              </div>
+              <div class="card">
+                <h3 class="title">task 2</h3>
+                <p class="due-date">Due: Sept 30</p>
+                <p class="assignee">Bob</p>
+              </div>
+              <div class="card">
+                <h3 class="title">task 3</h3>
+                <p class="due-date">Due: Oct 2</p>
+                <p class="assignee">Julia</p>
+              </div>
+            </div>
+          </div>
 
-        <div id="progress-list" class="list">
-          <div class="card">
-            <h3 class="title">task A</h3>
-            <p class="due-date">Due: Sept 22</p>
-            <p class="assignee">Jack</p>
-          </div>
-          <div class="card">
-            <h3 class="title">task B</h3>
-            <p class="due-date">Due: Sept 30</p>
-            <p class="assignee">Julia</p>
-          </div>
-          <div class="card">
-            <h3 class="title">task C</h3>
-            <p class="due-date">Due: Oct 2</p>
-            <p class="assignee">Bob</p>
-          </div>
-        </div>
-      </div>
+          <!-- column 2: in progress -->
+          <div class="column">
+            <div class="bubble-headerProgress">
+              <h1>In Progress</h1>
+            </div>
 
-      <!-- column 3: completed -->
-      <div class="column">
-        <div class="bubble-headerComplete">
-          <h1>Completed</h1>
-        </div>
+            <div id="progress-list" class="list">
+              <div class="card">
+                <h3 class="title">task A</h3>
+                <p class="due-date">Due: Sept 22</p>
+                <p class="assignee">Jack</p>
+              </div>
+              <div class="card">
+                <h3 class="title">task B</h3>
+                <p class="due-date">Due: Sept 30</p>
+                <p class="assignee">Julia</p>
+              </div>
+              <div class="card">
+                <h3 class="title">task C</h3>
+                <p class="due-date">Due: Oct 2</p>
+                <p class="assignee">Bob</p>
+              </div>
+            </div>
+          </div>
 
-        <div id="completed-list" class="list">
-          <div class="card">
-            <h3 class="title">task I</h3>
-            <p class="due-date">Due: Sept 22</p>
-            <p class="assignee">Bob</p>
-          </div>
-          <div class="card">
-            <h3 class="title">task II</h3>
-            <p class="due-date">Due: Sept 30</p>
-            <p class="assignee">Anna</p>
-          </div>
-          <div class="card">
-            <h3 class="title">task III</h3>
-            <p class="due-date">Due: Oct 2</p>
-            <p class="assignee">Jack</p>
+          <!-- column 3: completed -->
+          <div class="column">
+            <div class="bubble-headerComplete">
+              <h1>Completed</h1>
+            </div>
+
+            <div id="completed-list" class="list">
+              <div class="card">
+                <h3 class="title">task I</h3>
+                <p class="due-date">Due: Sept 22</p>
+                <p class="assignee">Bob</p>
+              </div>
+              <div class="card">
+                <h3 class="title">task II</h3>
+                <p class="due-date">Due: Sept 30</p>
+                <p class="assignee">Anna</p>
+              </div>
+              <div class="card">
+                <h3 class="title">task III</h3>
+                <p class="due-date">Due: Oct 2</p>
+                <p class="assignee">Jack</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
