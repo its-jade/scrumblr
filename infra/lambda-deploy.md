@@ -116,6 +116,8 @@ API Gateway provides a REST endpoint for your Lambda function.
    
 3. Replace the placeholder with your actual Invoke URL from API Gateway
 
+
+
 #  Deployment Complete!
 
 Your Scrumblr Kanban board is now a full-stack application with:
