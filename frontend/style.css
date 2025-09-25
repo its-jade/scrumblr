@@ -66,7 +66,20 @@
     background-color: #f9f9f9;
 }
 
+.add-task-btn {
+    height: 2rem;
+    line-height: 2rem;
+    padding: 0.25rem 0.75rem;
+    text-align: center;
+    font-size: .95rem;
+    background-color: #7bbfe3;
+    border-radius: 2rem;
+}
+
 .bubble-headerStart {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     position: relative;  
     padding: 0.5rem 1rem; 
     margin-bottom: 1rem;
