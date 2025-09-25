@@ -85,8 +85,15 @@
     padding: 0.25rem 0.75rem;
     text-align: center;
     font-size: .95rem;
-    background-color: #7bbfe3;
+    background-color: #1cb2f8;
+    color: #f0f0f0;
     border-radius: 2rem;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.add-task-btn:hover {
+    background-color: #1fc0ff;
 }
 
 .bubble-header {
