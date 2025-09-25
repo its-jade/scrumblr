@@ -2,6 +2,7 @@
       font-family: "Nunito", sans-serif;
       font-size: 1rem;
       color: #222;
+      background-color: #f7f7f7;
   }
 
   h1,
@@ -37,7 +38,6 @@
     flex: 0 0 15rem;
     padding: 1rem;
     border-radius: 1rem;
-    background-color: #f9f9f9;
 }
 
 .kanban-board {
@@ -51,19 +51,32 @@
     flex: 1 1 32%;
     padding: 1.5rem;
     border-radius: 1rem;
-    background: #cecece;
+    /* background: #cecece; */
+}
+
+#start-col {
+    background: #fa757021;
+}
+
+#progress-col {
+    background: #fae57021;
+}
+
+#completed-col {
+    background: #89fa7021;
 }
 
 .card {
     margin-block: 1rem;
     padding: 1rem;
-    border-radius: .75rem;
-    background-color: #e2e2e2;
+    border-radius: 1rem;
+    background-color: #ffffff;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
     cursor: move;
 }
 
 .card:hover {
-    background-color: #f9f9f9;
+    background-color: #eeeeee;
 }
 
 .add-task-btn {
@@ -76,35 +89,12 @@
     border-radius: 2rem;
 }
 
-.bubble-headerStart {
+.bubble-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;  
     padding: 0.5rem 1rem; 
     margin-bottom: 1rem;
-    border-radius: 10px;
-    background-color: #FF746C;
-    color: Black;
-    text-align: left;
-}
-
-.bubble-headerProgress {
-    position: relative;
-    padding: 0.5rem 1rem;
-    margin-bottom: 1rem;
-    border-radius: 10px;
-    background-color: #FFC067;
-    color: Black;
-    text-align: left;
-}
-
-.bubble-headerComplete {
-    position: relative;
-    padding: 0.5rem 1rem;
-    margin-bottom: 1rem;
-    border-radius: 10px;
-    background-color: #6EC175;
-    color: Black;
     text-align: left;
 }
