@@ -2,7 +2,7 @@
       font-family: "Nunito", sans-serif;
       font-size: 1rem;
       color: #222;
-      background-color: #f7f7f7;
+      background-color: #fefefe;
   }
 
   h1,
@@ -13,6 +13,14 @@
   .bubble-headerComplete {
       font-family: "IBM Plex Sans", sans-serif;
       font-weight: 500;
+  }
+
+  h1 {
+    color: black;
+  }
+
+  .proj-due-date {
+    color: #fa7470;
   }
   
   .container {
@@ -28,10 +36,12 @@
   }
 
   header {
-      padding: 10px;
-      text-align: left;
-      font-size: 2rem;
-      color: Black;
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding: 10px;
+    text-align: left;
+    font-size: 2rem;
   }
 
 .sidebar {
@@ -55,15 +65,15 @@
 }
 
 #start-col {
-    background: #fa757021;
+    background: #fa757019;
 }
 
 #progress-col {
-    background: #fae57021;
+    background: #fae57020;
 }
 
 #completed-col {
-    background: #89fa7021;
+    background: #89fa7020;
 }
 
 .card {
@@ -71,7 +81,7 @@
     padding: 1rem;
     border-radius: 1rem;
     background-color: #ffffff;
-    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
     cursor: move;
 }
 
@@ -85,6 +95,7 @@
     padding: 0.25rem 0.75rem;
     text-align: center;
     font-size: .95rem;
+    font-weight: 600;
     background-color: #1cb2f8;
     color: #f0f0f0;
     border-radius: 2rem;
