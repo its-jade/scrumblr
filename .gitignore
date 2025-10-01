@@ -1,18 +1,21 @@
 # Node
 node_modules/
 npm-debug.log
-package-lock.json
 
 # OS
+.env
 .DS_Store
 Thumbs.db
 
 # Build/zip artifacts
+dist/
+build/
 *.zip
 
 
 # amplify
-node_modules
-.amplify
+.amplify/
 amplify_outputs*
 amplifyconfiguration*
+amplify/#current-cloud-backend/
+amplify/team-provider-info.json
