@@ -9,3 +9,10 @@ Thumbs.db
 
 # Build/zip artifacts
 *.zip
+
+
+# amplify
+node_modules
+.amplify
+amplify_outputs*
+amplifyconfiguration*
