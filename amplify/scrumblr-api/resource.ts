@@ -1,6 +1,6 @@
 import { defineFunction } from "@aws-amplify/backend";
 
-export const scrumblrApi = defineFunction({
+export const helloFn = defineFunction({
   name: "scrumblr-api",
   entry: "./handler.ts",
 });

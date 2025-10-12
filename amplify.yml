@@ -7,7 +7,7 @@ backend:
         - npm ci
     build:
       commands:
-        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $d3u8gs30icfgrr
+        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id d3u8gs30icfgrr
 
 frontend:
   phases:
