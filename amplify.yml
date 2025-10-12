@@ -7,7 +7,7 @@ backend:
         - npm ci
     build:
       commands:
-        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $d3u8gs30icfgrr
 
 frontend:
   phases:
@@ -20,7 +20,7 @@ frontend:
   artifacts:
     baseDirectory: frontend
     files:
-      - '**/*'
+      - "**/*"
   cache:
     paths:
       - node_modules/**/*
