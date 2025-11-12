@@ -23,7 +23,16 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
   }
+function createProject(title) {
+    const project = document.createElement("div");
+    project.className = "project";
+    project.dataset.id = title.id;
 
+   card.innerHTML = `
+      <h3 class="title">${escapeHtml(title.title)}</h3>
+      p class="due-date">Due: ${escapeHtml(title.dueDate)}</p>
+      `;
+}
   function createCardElement(task) {
     const card = document.createElement("div");
     card.className = "card";
