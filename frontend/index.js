@@ -101,6 +101,21 @@ function createProject(title) {
   setupSortable(ProgressList);
   setupSortable(CompleteList);
 
+
+  document.querySelectorAll(".add-project-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const title = prompt("Task title:");
+      if (!title) return alert("Task title is required.");
+      const dueDate = prompt("Due date (YYYY-MM-DD):");
+      if (!dueDate) return alert("Due date is required.");
+      
+      const newProject = {
+        id: Date.now().toString(), // simple unique id
+        title,
+        dueDate
+      };
+
+      
   // ---------- CREATE TASK ----------
   document.querySelectorAll(".add-task-btn").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -123,7 +138,8 @@ function createProject(title) {
         dueDate,
         status
       };
-
+      
+      title.push(newProject);
       tasks.push(newTask);
       addTaskToBoard(newTask);
     });
