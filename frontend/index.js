@@ -76,6 +76,34 @@ function createProject(title) {
     return card;
   }
 
+$host = "localhost";
+$user = "root";
+$pass = "";
+$dbname = "my_database";
+
+// Create connection
+$conn = new mysqli($host, $user, $pass, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Example: Fetch a title from the 'posts' table
+$id = 1; // Example post ID (could come from URL or form input)
+$stmt = $conn->prepare("SELECT title FROM posts WHERE id = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$stmt->bind_result($title);
+$stmt->fetch();
+$stmt->close();
+$conn->close();
+
+// Escape output to prevent XSS
+$safeTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+
+
+  
   function addTaskToBoard(task) {
     const targetListId = Object.keys(columnMap).find(k => columnMap[k] === task.status) || "start-list";
     const list = document.getElementById(targetListId);
