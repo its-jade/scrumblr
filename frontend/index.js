@@ -3,7 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const StartList = document.getElementById("start-list");
   const ProgressList = document.getElementById("progress-list");
   const CompleteList = document.getElementById("completed-list");
-
+  const dropArea = document.getElementById("drop-area");
+  const linksDiv = document.getElementById("links");
   // simple in-memory store
   let tasks = [];
 
@@ -23,16 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
   }
-function createProject(title) {
-    const project = document.createElement("div");
-    project.className = "project";
-    project.dataset.id = title.id;
 
-   card.innerHTML = `
-      <h3 class="title">${escapeHtml(title.title)}</h3>
-      p class="due-date">Due: ${escapeHtml(title.dueDate)}</p>
-      `;
-}
   function createCardElement(task) {
     const card = document.createElement("div");
     card.className = "card";
@@ -75,35 +67,39 @@ function createProject(title) {
 
     return card;
   }
-
-$host = "localhost";
-$user = "root";
-$pass = "";
-$dbname = "my_database";
-
-// Create connection
-$conn = new mysqli($host, $user, $pass, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Example: Fetch a title from the 'posts' table
-$id = 1; // Example post ID (could come from URL or form input)
-$stmt = $conn->prepare("SELECT title FROM posts WHERE id = ?");
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$stmt->bind_result($title);
-$stmt->fetch();
-$stmt->close();
-$conn->close();
-
-// Escape output to prevent XSS
-$safeTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-
-
+//drag and drop fileslambda
   
+
+dropArea.addEventListener("dragover", (e) => e.preventDefault());
+dropArea.addEventListener("drop", async (e) => {
+  e.preventDefault();
+
+  const file = e.dataTransfer.files[0];
+  if (!file) return;
+
+  // 1. Request signed URLs from Lambda
+  const res = await fetch("https://wvi0tdqdrk.execute-api.us-east-2.amazonaws.com/scrumblr1/project/files", {
+    method: "POST",
+    body: JSON.stringify({ filename: file.name, fileType: file.type }),
+  });
+
+  const { uploadUrl, downloadUrl } = await res.json();
+
+  // 2. Upload the file directly to S3
+  await fetch(uploadUrl, {
+    method: "PUT",
+    headers: { "Content-Type": file.type },
+    body: file,
+  });
+
+  // 3. Show download link
+  const link = document.createElement("a");
+  link.href = downloadUrl;
+  link.textContent = `Download ${file.name}`;
+  link.target = "_blank";
+  linksDiv.appendChild(link);
+  linksDiv.appendChild(document.createElement("br"));
+});
   function addTaskToBoard(task) {
     const targetListId = Object.keys(columnMap).find(k => columnMap[k] === task.status) || "start-list";
     const list = document.getElementById(targetListId);
@@ -129,21 +125,6 @@ $safeTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
   setupSortable(ProgressList);
   setupSortable(CompleteList);
 
-
-  document.querySelectorAll(".add-project-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const title = prompt("Task title:");
-      if (!title) return alert("Task title is required.");
-      const dueDate = prompt("Due date (YYYY-MM-DD):");
-      if (!dueDate) return alert("Due date is required.");
-      
-      const newProject = {
-        id: Date.now().toString(), // simple unique id
-        title,
-        dueDate
-      };
-
-      
   // ---------- CREATE TASK ----------
   document.querySelectorAll(".add-task-btn").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -166,10 +147,10 @@ $safeTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
         dueDate,
         status
       };
-      
-      title.push(newProject);
+
       tasks.push(newTask);
       addTaskToBoard(newTask);
     });
   });
 });
+
