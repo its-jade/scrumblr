@@ -78,7 +78,7 @@ dropArea.addEventListener("drop", async (e) => {
   if (!file) return;
 
   // 1. Request signed URLs from Lambda
-  const res = await fetch("YOUR_API_GATEWAY_URL", {
+  const res = await fetch("https://wvi0tdqdrk.execute-api.us-east-2.amazonaws.com/scrumblr1/project/files", {
     method: "POST",
     body: JSON.stringify({ filename: file.name, fileType: file.type }),
   });
