@@ -67,39 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     return card;
   }
-//drag and drop fileslambda
-  
 
-dropArea.addEventListener("dragover", (e) => e.preventDefault());
-dropArea.addEventListener("drop", async (e) => {
-  e.preventDefault();
-
-  const file = e.dataTransfer.files[0];
-  if (!file) return;
-
-  // 1. Request signed URLs from Lambda
-  const res = await fetch("https://wvi0tdqdrk.execute-api.us-east-2.amazonaws.com/scrumblr1/project/files", {
-    method: "POST",
-    body: JSON.stringify({ filename: file.name, fileType: file.type }),
-  });
-
-  const { uploadUrl, downloadUrl } = await res.json();
-
-  // 2. Upload the file directly to S3
-  await fetch(uploadUrl, {
-    method: "PUT",
-    headers: { "Content-Type": file.type },
-    body: file,
-  });
-
-  // 3. Show download link
-  const link = document.createElement("a");
-  link.href = downloadUrl;
-  link.textContent = `Download ${file.name}`;
-  link.target = "_blank";
-  linksDiv.appendChild(link);
-  linksDiv.appendChild(document.createElement("br"));
-});
   function addTaskToBoard(task) {
     const targetListId = Object.keys(columnMap).find(k => columnMap[k] === task.status) || "start-list";
     const list = document.getElementById(targetListId);
