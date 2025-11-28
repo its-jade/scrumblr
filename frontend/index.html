@@ -1,78 +1,217 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scrumblr</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+</head>
+<body>
 
-    <title>Scrumblr</title>
+  <div class="scrumblr-logo-container">
+    <div class="scrumblr-logo">
+    <span class="logo-icon">⚡</span>
+      <span class="logo-text">Scrumblr</span>
+    </div>
+  </div>
 
-    <link rel="stylesheet" href="style.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Nunito:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
-  </head>
-
-  <body>
-    <div class="container">
-      <header>
-        <h1>Project title goes here</h1>
-        <h3 class="proj-due-date">due date 00.00</h3>
-      </header>
-
-      <div class="main-content">
-        <div class="sidebar">
-          <div id="goals-section">
-            <h1>Goals</h1>
-            <p>Project goals and description will go here.</p>
-          </div>
-          <div id="members-list">
-            <h1>Members</h1>
-            <ul>
-              <li>Person 1</li>
-              <li>Person 2</li>
-              <li>Person 3</li>
-            </ul>
-          </div>
-          <div id="drop-area" style="border:2px dashed #888; padding:10px; text-align:center">
-  Drag files here
-</div>
-
-<div id="links"></div>
+  <div class="app-container">
+    <div class="main-content">
+      
+      <div class="sidebar">
+        <div class="project-section">
+          <h1 id="project-title" contenteditable="true">Web Redesign</h1>
+          <h3 id="project-due-date" contenteditable="true" class="due-date">Due: Oct 24</h3>
+        </div>
+        
+        <div class="goals-section">
+          <h2>Goals</h2>
+          <p id="goals-content" contenteditable="true" class="editable-text">
+            Refactor the homepage CSS, implement dark mode, and optimize images.
+          </p>
         </div>
 
-        <div class="kanban-board">
-          <!-- column 1: to start -->
-          <div id="start-col" class="column">
-            <div class="bubble-header">
-              <h1>To Start</h1>
-              <p class="add-task-btn">+ Add Task</p>
-            </div>
-            <div id="start-list" class="list"></div>
-          </div>
+        <div class="members-section">
+          <h2>Team</h2>
+          <ul id="members-list">
+            <li class="member-item">
+              <span class="member-name">Alex Dev</span>
+              <span class="member-actions">
+                <button class="icon-btn edit-btn" onclick="editMember(this)">✏️</button>
+                <button class="icon-btn delete-btn" onclick="deleteMember(this)">🗑️</button>
+              </span>
+            </li>
+            <li class="member-item">
+              <span class="member-name">Sam Design</span>
+              <span class="member-actions">
+                <button class="icon-btn edit-btn" onclick="editMember(this)">✏️</button>
+                <button class="icon-btn delete-btn" onclick="deleteMember(this)">🗑️</button>
+              </span>
+            </li>
+          </ul>
+          <button id="add-member-btn" class="btn-outline" onclick="addMember()">+ Add Member</button>
+        </div>
 
-          <!-- column 2: in progress -->
-          <div id="progress-col" class="column">
-            <div class="bubble-header">
-              <h1>In Progress</h1>
-              <p class="add-task-btn">+ Add Task</p>
-            </div>
-            <div id="progress-list" class="list"></div>
+        <div class="upload-section">
+          <h2>Assets</h2>
+          <div id="drop-area">
+            <p>Drag files here<br>or <span class="browse-link">browse</span></p>
           </div>
-
-          <!-- column 3: completed -->
-          <div id="completed-col" class="column">
-            <div class="bubble-header">
-              <h1>Completed</h1>
-              <p class="add-task-btn">+ Add Task</p>
-            </div>
-            <div id="completed-list" class="list"></div>
-          </div>
+          <input type="file" id="file-input" hidden multiple />
+          <ul id="file-list"></ul>
         </div>
       </div>
+
+      <div class="kanban-board">
+        
+        <div class="column" id="col-start">
+          <div class="column-header header-start">
+            <h2>To Start</h2>
+            <span class="task-count">0</span>
+          </div>
+          <div class="task-list" id="start-list">
+            </div>
+          <button class="btn-add-task" onclick="addTask('start-list')">+ Add Task</button>
+        </div>
+
+        <div class="column" id="col-progress">
+          <div class="column-header header-progress">
+            <h2>In Progress</h2>
+            <span class="task-count">0</span>
+          </div>
+          <div class="task-list" id="progress-list"></div>
+          <button class="btn-add-task" onclick="addTask('progress-list')">+ Add Task</button>
+        </div>
+
+        <div class="column" id="col-completed">
+          <div class="column-header header-completed">
+            <h2>Completed</h2>
+            <span class="task-count">0</span>
+          </div>
+          <div class="task-list" id="completed-list"></div>
+          <button class="btn-add-task" onclick="addTask('completed-list')">+ Add Task</button>
+        </div>
+
+      </div>
     </div>
-    <script src="index.js"></script>
-  </body>
+  </div>
+
+  <script>
+    /* --- Member Management --- */
+    function editMember(button) {
+      const memberItem = button.closest('.member-item');
+      const nameSpan = memberItem.querySelector('.member-name');
+      const newName = prompt('Edit member name:', nameSpan.textContent);
+      if (newName !== null && newName.trim() !== '') {
+        nameSpan.textContent = newName.trim();
+      }
+    }
+
+    function deleteMember(button) {
+      if (confirm('Remove this member?')) {
+        button.closest('.member-item').remove();
+      }
+    }
+
+    function addMember() {
+      const name = prompt('Enter new member name:');
+      if (name && name.trim()) {
+        const list = document.getElementById('members-list');
+        const li = document.createElement('li');
+        li.className = 'member-item';
+        li.innerHTML = `
+          <span class="member-name">${name.trim()}</span>
+          <span class="member-actions">
+            <button class="icon-btn edit-btn" onclick="editMember(this)">✏️</button>
+            <button class="icon-btn delete-btn" onclick="deleteMember(this)">🗑️</button>
+          </span>`;
+        list.appendChild(li);
+      }
+    }
+
+    /* --- File Upload Logic --- */
+    const dropArea = document.getElementById('drop-area');
+    const fileInput = document.getElementById('file-input');
+    const fileList = document.getElementById('file-list');
+
+    // Trigger file input on click
+    dropArea.addEventListener('click', () => fileInput.click());
+
+    // Handle Input Change
+    fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+    // Prevent default drag behaviors
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      dropArea.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    // Highlight drop area
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropArea.addEventListener(eventName, () => dropArea.classList.add('highlight'), false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropArea.addEventListener(eventName, () => dropArea.classList.remove('highlight'), false);
+    });
+
+    // Handle Drop
+    dropArea.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      handleFiles(files);
+    });
+
+    function handleFiles(files) {
+      ([...files]).forEach(file => {
+        const li = document.createElement('li');
+        li.className = 'file-item';
+        li.innerHTML = `<span>📄 ${file.name}</span> <span class="remove-file" onclick="this.parentElement.remove()">×</span>`;
+        fileList.appendChild(li);
+      });
+    }
+
+    /* --- Kanban Task Logic --- */
+    
+    // Initialize SortableJS for all columns
+    ['start-list', 'progress-list', 'completed-list'].forEach(id => {
+      new Sortable(document.getElementById(id), {
+        group: 'shared', // set both lists to same group
+        animation: 150,
+        ghostClass: 'sortable-ghost'
+      });
+    });
+
+    function addTask(listId) {
+      const list = document.getElementById(listId);
+      const task = document.createElement('div');
+      task.className = 'task-card';
+      task.innerHTML = `
+        <div class="task-content" contenteditable="true">New Task</div>
+        <button class="delete-task-btn" onclick="deleteTask(this)">🗑️</button>
+      `;
+      list.appendChild(task);
+      updateCounts();
+    }
+
+    function deleteTask(btn) {
+      if(confirm("Delete this task?")) {
+        btn.parentElement.remove();
+        updateCounts();
+      }
+    }
+
+    // Optional: Update task counts (simple implementation)
+    function updateCounts() {
+      // Logic to update the numbers in headers could go here
+    }
+
+  </script>
+</body>
 </html>
