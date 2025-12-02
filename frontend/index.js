@@ -38,8 +38,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // --- API CONFIGURATION ---
-  const API_BASE_URL = 'https://c6hyjvautj.execute-api.us-east-2.amazonaws.com/default';
-  const UPLOAD_API_URL = 'https://0rttwcee3d.execute-api.us-east-2.amazonaws.com/default';
+  const API_BASE_URL = 'https://3tqxoixpy5.execute-api.us-west-2.amazonaws.com/default';
+  const UPLOAD_API_URL = 'https://93ia49japf.execute-api.us-west-2.amazonaws.com/default';
 
   // --- LOAD DATA FROM API ---
   async function loadScrumblrData() {
