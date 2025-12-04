@@ -256,9 +256,12 @@ document.addEventListener("DOMContentLoaded", () => {
     card.className = "task-card";
     card.dataset.id = task.id;
 
+    const dueText =
+      task.dueDate && task.dueDate.trim() !== "" ? task.dueDate : "TBD";
+
     card.innerHTML = `
       <h3 class="title">${escapeHtml(task.title)}</h3>
-      <p class="due-date">Due: ${escapeHtml(task.dueDate)}</p>
+      <p class="due-date">Due: ${escapeHtml(dueText)}</p>
       <p class="assignee">${escapeHtml(task.assignee)}</p>
       <div class="card-controls">
         <button class="edit-btn" title="Edit">✏️</button>
