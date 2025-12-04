@@ -278,7 +278,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (newTitle === null) return;
       const newAssignee = prompt("Edit assignee:", task.assignee);
       if (newAssignee === null) return;
-      const newDue = prompt("Edit due date (MM-DD-YY):", task.dueDate);
+      const newDue = prompt("Edit due date (MM-DD-YYYY):", task.dueDate);
       if (newDue === null) return;
 
       task.title = newTitle;
@@ -325,7 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!title) return alert("Task title is required.");
       const assignee = prompt("Assignee (name):");
       if (!assignee) return alert("Assignee is required.");
-      const dueDate = prompt("Due date (MM-DD-YY):");
+      const dueDate = prompt("Due date (MM-DD-YYYY):");
       if (!dueDate) return alert("Due date is required.");
 
       const parentColumn = btn.closest(".column");
