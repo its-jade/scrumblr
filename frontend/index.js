@@ -1,83 +1,108 @@
 document.addEventListener("DOMContentLoaded", () => {
   // --- EDITABLE FIELDS ---
-  const projectTitleEl = document.getElementById('project-title');
-  const projectDueDateEl = document.getElementById('project-due-date');
-  const goalsContentEl = document.getElementById('goals-content');
+  const projectTitleEl = document.getElementById("project-title");
+  const projectDueDateEl = document.getElementById("project-due-date");
+  const goalsContentEl = document.getElementById("goals-content");
 
   // Project Title
-  projectTitleEl.addEventListener('blur', function() {
-    console.log('Project title updated to:', this.textContent);
+  projectTitleEl.addEventListener("blur", function () {
+    console.log("Project title updated to:", this.textContent);
   });
-  projectTitleEl.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
+  projectTitleEl.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
       this.blur();
       e.preventDefault();
     }
   });
 
   // Due Date
-  projectDueDateEl.addEventListener('blur', function() {
-    console.log('Due date updated to:', this.textContent);
+  projectDueDateEl.addEventListener("blur", function () {
+    console.log("Due date updated to:", this.textContent);
   });
-  projectDueDateEl.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
+  projectDueDateEl.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
       this.blur();
       e.preventDefault();
     }
   });
 
   // Goals
-  goalsContentEl.addEventListener('blur', function() {
-    console.log('Goals updated to:', this.textContent);
+  goalsContentEl.addEventListener("blur", function () {
+    console.log("Goals updated to:", this.textContent);
   });
-  goalsContentEl.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
+  goalsContentEl.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
       this.blur();
       e.preventDefault();
     }
   });
 
   // --- API CONFIGURATION ---
-  const API_BASE_URL = 'https://3tqxoixpy5.execute-api.us-west-2.amazonaws.com/default';
-  const UPLOAD_API_URL = 'https://93ia49japf.execute-api.us-west-2.amazonaws.com/default';
+  const API_BASE_URL =
+    "https://9qxlkugsih.execute-api.us-east-2.amazonaws.com/prod";
+
+  // change this later
+  const UPLOAD_API_URL =
+    "https://93ia49japf.execute-api.us-west-2.amazonaws.com/default";
 
   // --- LOAD DATA FROM API ---
   async function loadScrumblrData() {
     try {
-      const response = await fetch(`${API_BASE_URL}/scrumblr-api`);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const response = await fetch(`${API_BASE_URL}/scrumblr`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
-      
+
       if (data.success && data.mockData) {
         const scrumblr = data.mockData;
-        
+
+        // project info
         if (scrumblr.projects && scrumblr.projects.length > 0) {
           const project = scrumblr.projects[0];
-          projectTitleEl.textContent = project.title || 'Scrumblr Board';
-          projectDueDateEl.textContent = project.due_date ? `due date ${project.due_date}` : 'due date TBD';
-          goalsContentEl.textContent = project.goals || 'No goals defined';
+          projectTitleEl.textContent = project.title || "Scrumblr Board";
+          projectDueDateEl.textContent = project.due_date
+            ? `DUE DATE ${project.due_date}`
+            : "DUE DATE TBD";
+          goalsContentEl.textContent = project.goals || "No goals defined";
         }
-        
+
+        // team members
         if (scrumblr.users && scrumblr.users.length > 0) {
-          const membersUl = document.getElementById('members-ul');
-          membersUl.innerHTML = '';
-          scrumblr.users.forEach(user => {
+          const membersUl = document.getElementById("members-list");
+          membersUl.innerHTML = "";
+          scrumblr.users.forEach((user) => {
             addMemberToTeam(user.name, user.user_id);
+          });
+        }
+
+        // tasks
+        if (scrumblr.tasks && scrumblr.tasks.length > 0) {
+          // clear existing cards
+          StartList.innerHTML = "";
+          ProgressList.innerHTML = "";
+          CompleteList.innerHTML = "";
+
+          tasks = [];
+
+          scrumblr.tasks.forEach((task) => {
+            tasks.push(task);
+            addTaskToBoard(task);
           });
         }
       }
     } catch (error) {
-      console.error('Error loading Scrumblr ', error);
+      console.error("Error loading Scrumblr ", error);
     }
   }
 
   // --- MEMBER MANAGEMENT ---
   function addMemberToTeam(memberName, memberId = null) {
-    const membersUl = document.getElementById('members-ul');
-    const memberItem = document.createElement('li');
-    memberItem.className = 'member-item';
+    const membersUl = document.getElementById("members-list");
+    const memberItem = document.createElement("li");
+    memberItem.className = "member-item";
     memberItem.dataset.memberId = memberId || Date.now().toString();
-    
+
     memberItem.innerHTML = `
       <span class="member-name">${escapeHtml(memberName)}</span>
       <div class="member-controls">
@@ -85,38 +110,45 @@ document.addEventListener("DOMContentLoaded", () => {
         <button class="member-delete-btn" title="Delete">🗑️</button>
       </div>
     `;
-    
-    memberItem.querySelector('.member-edit-btn').addEventListener('click', () => {
-      const currentName = memberItem.querySelector('.member-name').textContent;
-      const newName = prompt('Edit member name:', currentName);
-      if (newName !== null && newName.trim() !== '') {
-        memberItem.querySelector('.member-name').textContent = newName.trim();
-      }
-    });
-    
-    memberItem.querySelector('.member-delete-btn').addEventListener('click', () => {
-      const memberName = memberItem.querySelector('.member-name').textContent;
-      if (confirm(`Are you sure you want to delete member "${memberName}"?`)) {
-        memberItem.remove();
-      }
-    });
-    
+
+    memberItem
+      .querySelector(".member-edit-btn")
+      .addEventListener("click", () => {
+        const currentName =
+          memberItem.querySelector(".member-name").textContent;
+        const newName = prompt("Edit member name:", currentName);
+        if (newName !== null && newName.trim() !== "") {
+          memberItem.querySelector(".member-name").textContent = newName.trim();
+        }
+      });
+
+    memberItem
+      .querySelector(".member-delete-btn")
+      .addEventListener("click", () => {
+        const memberName = memberItem.querySelector(".member-name").textContent;
+        if (
+          confirm(`Are you sure you want to delete member "${memberName}"?`)
+        ) {
+          memberItem.remove();
+        }
+      });
+
     membersUl.appendChild(memberItem);
   }
 
-  document.getElementById('add-member-btn').addEventListener('click', () => {
-    const memberName = prompt('Enter new member name:');
-    if (memberName !== null && memberName.trim() !== '') {
+  document.getElementById("add-member-btn").addEventListener("click", () => {
+    const memberName = prompt("Enter new member name:");
+    if (memberName !== null && memberName.trim() !== "") {
       addMemberToTeam(memberName.trim());
     }
   });
 
   // --- FILE UPLOAD ---
-  const dropArea = document.getElementById('drop-area');
-  const fileInput = document.getElementById('file-input');
-  const linksDiv = document.getElementById('links');
+  const dropArea = document.getElementById("drop-area");
+  const fileInput = document.getElementById("file-input");
+  const linksDiv = document.getElementById("links");
 
-  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+  ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
     dropArea.addEventListener(eventName, preventDefaults, false);
   });
 
@@ -125,23 +157,23 @@ document.addEventListener("DOMContentLoaded", () => {
     e.stopPropagation();
   }
 
-  ['dragenter', 'dragover'].forEach(eventName => {
+  ["dragenter", "dragover"].forEach((eventName) => {
     dropArea.addEventListener(eventName, highlight, false);
   });
 
-  ['dragleave', 'drop'].forEach(eventName => {
+  ["dragleave", "drop"].forEach((eventName) => {
     dropArea.addEventListener(eventName, unhighlight, false);
   });
 
   function highlight() {
-    dropArea.style.backgroundColor = '#f0f9ff';
+    dropArea.style.backgroundColor = "#f0f9ff";
   }
 
   function unhighlight() {
-    dropArea.style.backgroundColor = '';
+    dropArea.style.backgroundColor = "";
   }
 
-  dropArea.addEventListener('drop', handleDrop, false);
+  dropArea.addEventListener("drop", handleDrop, false);
 
   function handleDrop(e) {
     const dt = e.dataTransfer;
@@ -151,48 +183,49 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  dropArea.addEventListener('click', () => {
+  dropArea.addEventListener("click", () => {
     fileInput.click();
   });
 
-  fileInput.addEventListener('change', (e) => {
+  fileInput.addEventListener("change", (e) => {
     if (e.target.files.length) {
       handleFileUpload(e.target.files[0]);
-      e.target.value = '';
+      e.target.value = "";
     }
   });
 
   async function handleFileUpload(file) {
     try {
       const uploadResponse = await fetch(`${UPLOAD_API_URL}/scrumbl-upload`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filename: file.name, fileType: file.type })
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: file.name, fileType: file.type }),
       });
 
-      if (!uploadResponse.ok) throw new Error(`Upload API error: ${uploadResponse.status}`);
+      if (!uploadResponse.ok)
+        throw new Error(`Upload API error: ${uploadResponse.status}`);
 
       const uploadData = await uploadResponse.json();
       if (!uploadData.uploadUrl || !uploadData.downloadUrl) {
-        throw new Error('Invalid upload response from server');
+        throw new Error("Invalid upload response from server");
       }
 
       const s3Response = await fetch(uploadData.uploadUrl, {
-        method: 'PUT',
-        headers: { 'Content-Type': file.type },
-        body: file
+        method: "PUT",
+        headers: { "Content-Type": file.type },
+        body: file,
       });
 
-      if (!s3Response.ok) throw new Error(`S3 upload error: ${s3Response.status}`);
+      if (!s3Response.ok)
+        throw new Error(`S3 upload error: ${s3Response.status}`);
 
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = uploadData.downloadUrl;
       link.textContent = `📥 Download ${file.name}`;
-      link.target = '_blank';
+      link.target = "_blank";
       linksDiv.appendChild(link);
-
     } catch (error) {
-      console.error('File upload failed:', error);
+      console.error("File upload failed:", error);
       alert(`File upload failed: ${error.message}`);
     }
   }
@@ -205,8 +238,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const columnMap = {
     "start-list": "Not Started",
-    "progress-list": "In Progress", 
-    "completed-list": "Completed"
+    "progress-list": "In Progress",
+    "completed-list": "Completed",
   };
 
   function escapeHtml(str) {
@@ -220,7 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function createCardElement(task) {
     const card = document.createElement("div");
-    card.className = "card";
+    card.className = "task-card";
     card.dataset.id = task.id;
 
     card.innerHTML = `
@@ -235,7 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     card.querySelector(".delete-btn").addEventListener("click", () => {
       if (confirm(`Are you sure you want to delete task "${task.title}"?`)) {
-        tasks = tasks.filter(t => t.id !== task.id);
+        tasks = tasks.filter((t) => t.id !== task.id);
         card.remove();
       }
     });
@@ -245,7 +278,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (newTitle === null) return;
       const newAssignee = prompt("Edit assignee:", task.assignee);
       if (newAssignee === null) return;
-      const newDue = prompt("Edit due date (YYYY-MM-DD):", task.dueDate);
+      const newDue = prompt("Edit due date (MM-DD-YY):", task.dueDate);
       if (newDue === null) return;
 
       task.title = newTitle;
@@ -261,7 +294,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function addTaskToBoard(task) {
-    const targetListId = Object.keys(columnMap).find(k => columnMap[k] === task.status) || "start-list";
+    const targetListId =
+      Object.keys(columnMap).find((k) => columnMap[k] === task.status) ||
+      "start-list";
     const list = document.getElementById(targetListId);
     const card = createCardElement(task);
     list.appendChild(card);
@@ -274,9 +309,9 @@ document.addEventListener("DOMContentLoaded", () => {
       onEnd: (evt) => {
         const taskId = evt.item.dataset.id;
         const newStatus = columnMap[evt.to.id];
-        const task = tasks.find(t => t.id === taskId);
+        const task = tasks.find((t) => t.id === taskId);
         if (task) task.status = newStatus;
-      }
+      },
     });
   }
 
@@ -284,18 +319,20 @@ document.addEventListener("DOMContentLoaded", () => {
   setupSortable(ProgressList);
   setupSortable(CompleteList);
 
-  document.querySelectorAll(".add-task-btn").forEach(btn => {
+  document.querySelectorAll(".btn-add-task").forEach((btn) => {
     btn.addEventListener("click", () => {
       const title = prompt("Task title:");
       if (!title) return alert("Task title is required.");
       const assignee = prompt("Assignee (name):");
       if (!assignee) return alert("Assignee is required.");
-      const dueDate = prompt("Due date (YYYY-MM-DD):");
+      const dueDate = prompt("Due date (MM-DD-YY):");
       if (!dueDate) return alert("Due date is required.");
 
-      let parentColumn = btn.closest(".column");
-      let listEl = parentColumn ? parentColumn.querySelector(".list") : document.getElementById("start-list");
-      let listId = listEl ? listEl.id : "start-list";
+      const parentColumn = btn.closest(".column");
+      const listEl = parentColumn
+        ? parentColumn.querySelector(".task-list")
+        : document.getElementById("start-list");
+      const listId = listEl ? listEl.id : "start-list";
       const status = columnMap[listId] || "Not Started";
 
       const newTask = {
@@ -303,7 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
         title,
         assignee,
         dueDate,
-        status
+        status,
       };
 
       tasks.push(newTask);
