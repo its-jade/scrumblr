@@ -366,7 +366,16 @@ document.addEventListener("DOMContentLoaded", () => {
       throw new Error(`API error ${response.status}`);
     }
 
-    const data = await response.json();
+    let data = await response.json();
+
+    if (data && typeof data.body === "string") {
+      try {
+        data = JSON.parse(data.body);
+      } catch (e) {
+        console.error("Failed to parse inner body JSON:", e);
+      }
+    }
+
     if (!data.success || !data.task) {
       throw new Error("Invalid API response");
     }
