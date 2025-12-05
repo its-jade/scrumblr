@@ -78,16 +78,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // tasks
         if (scrumblr.tasks && scrumblr.tasks.length > 0) {
-          // clear existing cards
           StartList.innerHTML = "";
           ProgressList.innerHTML = "";
           CompleteList.innerHTML = "";
 
           tasks = [];
 
-          scrumblr.tasks.forEach((task) => {
-            tasks.push(task);
-            addTaskToBoard(task);
+          scrumblr.tasks.forEach((taskFromApi) => {
+            const uiTask = {
+              id: taskFromApi.taskId || taskFromApi.id, // ← map taskId → id
+              title: taskFromApi.title,
+              assignee: taskFromApi.assignee,
+              dueDate: taskFromApi.dueDate,
+              status: taskFromApi.status || "Not Started",
+            };
+
+            tasks.push(uiTask);
+            addTaskToBoard(uiTask);
           });
         }
       }
@@ -254,7 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function createCardElement(task) {
     const card = document.createElement("div");
     card.className = "task-card";
-    card.dataset.id = task.id;
+    card.dataset.id = task.id || task.taskId || task.taskID;
 
     const dueText =
       task.dueDate && task.dueDate.trim() !== "" ? task.dueDate : "TBD";
@@ -309,11 +316,21 @@ document.addEventListener("DOMContentLoaded", () => {
     new Sortable(listEl, {
       group: "shared",
       animation: 150,
-      onEnd: (evt) => {
+      onEnd: async (evt) => {
         const taskId = evt.item.dataset.id;
         const newStatus = columnMap[evt.to.id];
         const task = tasks.find((t) => t.id === taskId);
-        if (task) task.status = newStatus;
+
+        if (!task || !newStatus) return;
+
+        task.status = newStatus;
+
+        try {
+          await saveTaskToApi(task);
+          console.log("Task status updated in DB:", taskId, newStatus);
+        } catch (err) {
+          console.error("Failed to update task status in DB", err);
+        }
       },
     });
   }
@@ -326,26 +343,40 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", async () => {
       const title = prompt("Task title:");
       if (!title) return alert("Task title is required.");
+
       const assignee = prompt("Assignee (name):");
       if (!assignee) return alert("Assignee is required.");
+
       const dueDate = prompt("Due date (MM-DD-YYYY):");
       if (!dueDate) return alert("Due date is required.");
 
       const parentColumn = btn.closest(".column");
-      const listEl = parentColumn
-        ? parentColumn.querySelector(".task-list")
-        : document.getElementById("start-list");
+      const listEl =
+        parentColumn?.querySelector(".task-list") ||
+        document.getElementById("start-list");
       const listId = listEl ? listEl.id : "start-list";
       const status = columnMap[listId] || "Not Started";
 
-      const newTask = { title, assignee, dueDate, status };
-
       try {
-        const savedTask = await createTaskViaApi(newTask); // gets { id, ... } from Lambda
-        tasks.push(savedTask);
-        addTaskToBoard(savedTask);
+        const savedTask = await createTaskViaApi(
+          title,
+          assignee,
+          dueDate,
+          status
+        );
+
+        const uiTask = {
+          id: savedTask.taskId || savedTask.id,
+          title: savedTask.title,
+          assignee: savedTask.assignee,
+          dueDate: savedTask.dueDate,
+          status: savedTask.status,
+        };
+
+        tasks.push(uiTask);
+        addTaskToBoard(uiTask);
       } catch (err) {
-        console.error("Failed to create task:", err);
+        console.error("Failed to create task via API", err);
         alert("Could not save task. Please try again.");
       }
     });
@@ -355,31 +386,54 @@ document.addEventListener("DOMContentLoaded", () => {
   loadScrumblrData();
 
   // create task via API
-  async function createTaskViaApi(task) {
+  async function createTaskViaApi(title, assignee, dueDate, status) {
     const response = await fetch(`${API_BASE_URL}/scrumblr`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(task),
+      body: JSON.stringify({ title, assignee, dueDate, status }),
     });
 
-    if (!response.ok) {
-      throw new Error(`API error ${response.status}`);
-    }
+    const raw = await response.json();
+    console.log("Raw POST response JSON:", raw);
 
-    let data = await response.json();
-
-    if (data && typeof data.body === "string") {
+    let data = raw;
+    if (raw && typeof raw.body === "string") {
       try {
-        data = JSON.parse(data.body);
+        data = JSON.parse(raw.body);
+        console.log("Unwrapped POST body JSON:", data);
       } catch (e) {
-        console.error("Failed to parse inner body JSON:", e);
+        console.error("Failed to parse POST body JSON:", e);
+        throw new Error("Invalid API response format");
       }
     }
 
-    if (!data.success || !data.task) {
+    if (!response.ok || !data || !data.success || !data.task) {
       throw new Error("Invalid API response");
     }
 
-    return data.task; // { id, title, assignee, dueDate, status }
+    return data.task;
+  }
+
+  async function saveTaskToApi(task) {
+    const response = await fetch(`${API_BASE_URL}/scrumblr`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: task.id,
+        title: task.title,
+        assignee: task.assignee,
+        dueDate: task.dueDate,
+        status: task.status,
+      }),
+    });
+
+    const data = await response.json();
+    console.log("Save task response:", data);
+
+    if (!response.ok || !data || !data.success || !data.task) {
+      throw new Error("Failed to save task to API");
+    }
+
+    return data.task;
   }
 });
