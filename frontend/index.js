@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const projectDueDateEl = document.getElementById("project-due-date");
   const goalsContentEl = document.getElementById("goals-content");
 
+  
   // Project Title
   projectTitleEl.addEventListener("blur", function () {
     console.log("Project title updated to:", this.textContent);
