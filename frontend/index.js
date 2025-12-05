@@ -276,10 +276,20 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
-    card.querySelector(".delete-btn").addEventListener("click", () => {
-      if (confirm(`Are you sure you want to delete task "${task.title}"?`)) {
+    card.querySelector(".delete-btn").addEventListener("click", async () => {
+      if (!confirm(`Are you sure you want to delete task "${task.title}"?`)) {
+        return;
+      }
+
+      try {
+        await deleteTaskViaApi(task.id);
+
         tasks = tasks.filter((t) => t.id !== task.id);
         card.remove();
+        console.log("Task deleted:", task.id);
+      } catch (err) {
+        console.error("Failed to delete task", err);
+        alert("Could not delete task from server. Please try again.");
       }
     });
 
@@ -427,13 +437,52 @@ document.addEventListener("DOMContentLoaded", () => {
       }),
     });
 
-    const data = await response.json();
-    console.log("Save task response:", data);
+    let raw = await response.json();
+    console.log("Save task raw response:", raw);
+
+    let data = raw;
+    if (raw && typeof raw.body === "string") {
+      try {
+        data = JSON.parse(raw.body);
+        console.log("Save task unwrapped response:", data);
+      } catch (e) {
+        console.error("Failed to parse save-task body JSON:", e);
+        throw new Error("Invalid API response format");
+      }
+    }
 
     if (!response.ok || !data || !data.success || !data.task) {
       throw new Error("Failed to save task to API");
     }
 
     return data.task;
+  }
+
+  async function deleteTaskViaApi(taskId) {
+    const response = await fetch(`${API_BASE_URL}/scrumblr`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: taskId, delete: true }),
+    });
+
+    const raw = await response.json();
+    console.log("Raw DELETE response JSON:", raw);
+
+    let data = raw;
+    if (raw && typeof raw.body === "string") {
+      try {
+        data = JSON.parse(raw.body);
+        console.log("Unwrapped DELETE body JSON:", data);
+      } catch (e) {
+        console.error("Failed to parse DELETE body JSON:", e);
+        throw new Error("Invalid API response format");
+      }
+    }
+
+    if (!response.ok || !data || !data.success) {
+      throw new Error("Failed to delete task");
+    }
+
+    return data;
   }
 });
