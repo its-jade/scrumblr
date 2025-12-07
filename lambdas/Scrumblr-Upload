@@ -1,0 +1,54 @@
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+
+const s3 = new S3Client({ region: "us-east-2" });
+const BUCKET = process.env.swecloudbucket;
+
+export const handler = async (event) => {
+  try {
+    if (!event.body) {
+      throw new Error("No file body received");
+    }
+
+    const fileContent = Buffer.from(
+      event.body,
+      event.isBase64Encoded ? "base64" : "utf8"
+    );
+
+    const filename = event.headers["x-file-name"] || `upload-${Date.now()}`;
+
+    const fileType =
+      event.headers["content-type"] || "application/octet-stream";
+
+    const key = `uploads/${filename}`;
+
+    await s3.send(
+      new PutObjectCommand({
+        Bucket: BUCKET,
+        Key: key,
+        Body: fileContent,
+        ContentType: fileType,
+      })
+    );
+
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: "File uploaded successfully",
+        fileKey: key,
+        downloadUrl: `https://${BUCKET}.s3.amazonaws.com/${key}`,
+      }),
+    };
+  } catch (err) {
+    console.error(err);
+    return {
+      statusCode: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ error: err.message || "Upload failed" }),
+    };
+  }
+};
