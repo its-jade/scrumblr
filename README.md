@@ -22,7 +22,24 @@ This web application is a Kanban-style task board built for **Cloud Software Dev
 ## Technologies Used
 
 - **Frontend**: Static site hosted on **AWS S3** using HTML, CSS, JavaScript
-- **Backend**(serverless): **AWS Lambda** functions for CRUD operations exposed via **API Gateway**
+- **Backend** (serverless): **AWS Lambda** functions for CRUD operations exposed via **API Gateway**
 - **Database**: **DynamoDB** stores tasks with attributes like ID, title, description, status, and timestamps
 - **File Storage**: **AWS S3** for storing uploaded documents using presigned URLs
 - **Version Control**: GitHub
+
+## Future Improvements
+
+- **Project Metadata Persistence**
+Sidebar metadata (project title, due date, members) is currently editable in the UI but not yet stored in the backend. Future updates would connect this data to DynamoDB via additional Lambda and API routes.
+
+- **User & Member Management**
+Add authentication (e.g., AWS Cognito) and support task assignment to members.
+
+- **Enhanced File Handling**
+Link uploaded files to specific tasks and display them directly in the UI.
+
+- **Real-Time Collaboration**
+Improve live updates across users using WebSockets or DynamoDB Streams.
+
+- **UI & Validation Enhancements**
+Improve mobile responsiveness, inline editing, and frontend/backend error handling.
