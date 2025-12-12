@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const projectDueDateEl = document.getElementById("project-due-date");
   const goalsContentEl = document.getElementById("goals-content");
 
-  
   // Project Title
   projectTitleEl.addEventListener("blur", function () {
     console.log("Project title updated to:", this.textContent);
@@ -41,10 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- API CONFIGURATION ---
   const API_BASE_URL =
     "https://9qxlkugsih.execute-api.us-east-2.amazonaws.com/prod";
-
-  // change this later
-  const UPLOAD_API_URL =
-    "https://93ia49japf.execute-api.us-west-2.amazonaws.com/default";
 
   // --- LOAD DATA FROM API ---
   async function loadScrumblrData() {
@@ -204,31 +199,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function handleFileUpload(file) {
     try {
-      const uploadResponse = await fetch(`${UPLOAD_API_URL}/scrumbl-upload`, {
+      const res = await fetch(`${API_BASE_URL}/Scrumblr-Upload`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: file.name, fileType: file.type }),
+        headers: {
+          "Content-Type": file.type || "application/octet-stream",
+          "X-File-Name": file.name,
+        },
+        body: await file.arrayBuffer(),
       });
 
-      if (!uploadResponse.ok)
-        throw new Error(`Upload API error: ${uploadResponse.status}`);
+      if (!res.ok) throw new Error(`Upload API error: ${res.status}`);
 
-      const uploadData = await uploadResponse.json();
-      if (!uploadData.uploadUrl || !uploadData.downloadUrl) {
-        throw new Error("Invalid upload response from server");
-      }
-
-      const s3Response = await fetch(uploadData.uploadUrl, {
-        method: "PUT",
-        headers: { "Content-Type": file.type },
-        body: file,
-      });
-
-      if (!s3Response.ok)
-        throw new Error(`S3 upload error: ${s3Response.status}`);
+      const data = await res.json();
 
       const link = document.createElement("a");
-      link.href = uploadData.downloadUrl;
+      link.href = data.downloadUrl;
       link.textContent = `📥 Download ${file.name}`;
       link.target = "_blank";
       linksDiv.appendChild(link);

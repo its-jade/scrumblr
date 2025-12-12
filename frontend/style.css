@@ -177,6 +177,17 @@ h2 {
   margin-top: 30px;
 }
 
+.uploaded-links a {
+  display: block;
+  margin-top: 6px;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.uploaded-links a:hover {
+  text-decoration: underline;
+}
+
 #drop-area {
   border: 2px dashed #cbd5e0;
   padding: 20px;
