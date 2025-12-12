@@ -30,16 +30,16 @@ This web application is a Kanban-style task board built for **Cloud Software Dev
 ## Future Improvements
 
 - **Project Metadata Persistence**
-Sidebar metadata (project title, due date, members) is currently editable in the UI but not yet stored in the backend. Future updates would connect this data to DynamoDB via additional Lambda and API routes.
+<br>Sidebar metadata (project title, due date, members) is currently editable in the UI but not yet stored in the backend. Future updates would connect this data to DynamoDB via additional Lambda and API routes.
 
 - **User & Member Management**
-Add authentication (e.g., AWS Cognito) and support task assignment to members.
+<br>Add authentication (e.g., AWS Cognito) and support task assignment to members.
 
 - **Enhanced File Handling**
-Link uploaded files to specific tasks and display them directly in the UI.
+<br>Link uploaded files to specific tasks and display them directly in the UI.
 
 - **Real-Time Collaboration**
-Improve live updates across users using WebSockets or DynamoDB Streams.
+<br>Improve live updates across users using WebSockets or DynamoDB Streams.
 
 - **UI & Validation Enhancements**
-Improve mobile responsiveness, inline editing, and frontend/backend error handling.
+<br>Improve mobile responsiveness, inline editing, and frontend/backend error handling.
