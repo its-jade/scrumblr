@@ -269,6 +269,23 @@ document.addEventListener("DOMContentLoaded", () => {
     assetsList.appendChild(li);
   }
 
+  async function loadAssets() {
+    const res = await fetch(`${API_BASE_URL}/Scrumblr-Upload`, {
+      method: "GET",
+    });
+    if (!res.ok) throw new Error(`List assets failed: ${res.status}`);
+    const data = await res.json();
+
+    assetsList.innerHTML = "";
+    (data.items || []).forEach((item) => {
+      addAssetRow({
+        fileName: item.fileName,
+        downloadUrl: item.downloadUrl,
+        key: item.fileKey,
+      });
+    });
+  }
+
   async function deleteAssetViaApi(key, fileName) {
     if (!key) {
       throw new Error(
@@ -447,6 +464,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- INITIALIZE APP ---
   loadScrumblrData();
+  loadAssets();
 
   // create task via API
   async function createTaskViaApi(title, assignee, dueDate, status) {
