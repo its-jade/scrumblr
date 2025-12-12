@@ -393,3 +393,67 @@ h2 {
     min-height: 200px;
   }
 }
+
+/* --- Assets List (clean rows) --- */
+.asset-list {
+  list-style: none;
+  margin-top: 10px;
+  padding: 0;
+}
+
+.asset-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #edf2f7;
+  margin-bottom: 6px;
+
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+.asset-item:hover {
+  background: #e7eefb;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+
+.asset-name {
+  font-size: 13px;
+  color: #2d3748;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.asset-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.asset-item:hover .asset-actions {
+  opacity: 1;
+}
+
+.asset-btn {
+  border: none;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.asset-btn:hover {
+  background: white;
+}

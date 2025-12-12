@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- FILE UPLOAD ---
   const dropArea = document.getElementById("drop-area");
   const fileInput = document.getElementById("file-input");
-  const linksDiv = document.getElementById("links");
+  const assetsList = document.getElementById("assets-list");
 
   ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
     dropArea.addEventListener(eventName, preventDefaults, false);
@@ -212,15 +212,81 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const data = await res.json();
 
-      const link = document.createElement("a");
-      link.href = data.downloadUrl;
-      link.textContent = `📥 Download ${file.name}`;
-      link.target = "_blank";
-      linksDiv.appendChild(link);
+      addAssetRow({
+        fileName: file.name,
+        downloadUrl: data.downloadUrl,
+        key: data.fileKey,
+      });
     } catch (error) {
       console.error("File upload failed:", error);
       alert(`File upload failed: ${error.message}`);
     }
+  }
+
+  function triggerDownload(downloadUrl) {
+    window.open(downloadUrl, "_blank", "noopener");
+  }
+
+  function addAssetRow({ fileName, downloadUrl, key }) {
+    const li = document.createElement("li");
+    li.className = "asset-item";
+    li.dataset.downloadUrl = downloadUrl;
+    if (key) li.dataset.key = key;
+
+    li.innerHTML = `
+    <span class="asset-name" title="${escapeHtml(fileName)}">${escapeHtml(
+      fileName
+    )}</span>
+    <div class="asset-actions">
+      <button class="asset-btn asset-download" title="Download">⬇️</button>
+      <button class="asset-btn asset-delete" title="Delete">🗑️</button>
+    </div>
+  `;
+
+    li.addEventListener("click", () => {
+      triggerDownload(downloadUrl);
+    });
+
+    li.querySelector(".asset-download").addEventListener("click", (e) => {
+      e.stopPropagation();
+      triggerDownload(downloadUrl);
+    });
+
+    li.querySelector(".asset-delete").addEventListener("click", async (e) => {
+      e.stopPropagation();
+
+      if (!confirm(`Delete "${fileName}"?`)) return;
+
+      try {
+        await deleteAssetViaApi(key, fileName);
+        li.remove();
+      } catch (err) {
+        console.error("Delete failed:", err);
+        alert("Could not delete file. Check API route + Lambda.");
+      }
+    });
+
+    assetsList.appendChild(li);
+  }
+
+  async function deleteAssetViaApi(key, fileName) {
+    if (!key) {
+      throw new Error(
+        "No file key returned by API. Update upload Lambda to return { key } so we can delete."
+      );
+    }
+
+    const res = await fetch(
+      `${API_BASE_URL}/Scrumblr-Upload?key=${encodeURIComponent(key)}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    if (!res.ok) throw new Error(`Delete API error: ${res.status}`);
+
+    return res.json().catch(() => ({}));
   }
 
   // --- TASK MANAGEMENT ---
@@ -239,9 +305,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!str) return "";
     return String(str)
       .replace(/&/g, "&amp;")
-      .replace(/</g, "<")
-      .replace(/>/g, ">")
-      .replace(/"/g, "&quot;");
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
   function createCardElement(task) {
